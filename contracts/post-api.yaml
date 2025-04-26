@@ -1,0 +1,51 @@
+openapi: 3.0.4
+info:
+  title: VCMS Social Media API
+  version: 1.0.0
+paths:
+  /posts:
+    post:
+      tags:
+        - Posts
+      summary: Create a post for social media
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRequest'
+      responses:
+        '201':
+          description: Created
+  /platforms:
+    get:
+      tags:
+        - Platforms
+      summary: Get supported platforms
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+components:
+  schemas:
+    PostRequest:
+      type: object
+      required: [message, platforms]
+      properties:
+        message:
+          type: string
+        mediaUrls:
+          type: array
+          items:
+            type: string
+        platforms:
+          type: array
+          items:
+            type: string
+        scheduleTime:
+          type: string
+          format: date-time

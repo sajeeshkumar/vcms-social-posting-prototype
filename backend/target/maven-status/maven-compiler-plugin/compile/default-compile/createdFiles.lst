@@ -1,0 +1,15 @@
+ca/kodingkrafters/inc/vcms/backend/repository/PlatformRepository.class
+ca/kodingkrafters/inc/vcms/backend/config/SchedulingConfig.class
+ca/kodingkrafters/inc/vcms/backend/repository/PostRepository.class
+ca/kodingkrafters/inc/vcms/backend/controller/PlatformController.class
+ca/kodingkrafters/inc/vcms/backend/service/PostService.class
+ca/kodingkrafters/inc/vcms/backend/api/PostsApi.class
+ca/kodingkrafters/inc/vcms/backend/model/Post$PostBuilder.class
+ca/kodingkrafters/inc/vcms/backend/api/PlatformsApi.class
+ca/kodingkrafters/inc/vcms/backend/VcmsBackendApplication.class
+ca/kodingkrafters/inc/vcms/backend/model/Platform.class
+ca/kodingkrafters/inc/vcms/backend/service/PlatformService.class
+ca/kodingkrafters/inc/vcms/backend/model/PostRequest.class
+ca/kodingkrafters/inc/vcms/backend/controller/PostController.class
+ca/kodingkrafters/inc/vcms/backend/api/ApiUtil.class
+ca/kodingkrafters/inc/vcms/backend/model/Post.class

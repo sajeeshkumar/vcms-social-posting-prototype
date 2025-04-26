@@ -1,0 +1,4 @@
+src/main/java/ca/kodingkrafters/inc/vcms/backend/api/ApiUtil.java
+src/main/java/ca/kodingkrafters/inc/vcms/backend/api/PlatformsApi.java
+src/main/java/ca/kodingkrafters/inc/vcms/backend/api/PostsApi.java
+src/main/java/ca/kodingkrafters/inc/vcms/backend/model/PostRequest.java
