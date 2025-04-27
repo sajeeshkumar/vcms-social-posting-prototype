@@ -1,9 +1,0 @@
-springdoc:
-  swagger-ui.path: /swagger-ui.html
-
-spring:
-  datasource:
-    url: jdbc:h2:mem:testdb
-  jpa:
-    hibernate:
-      ddl-auto: update
