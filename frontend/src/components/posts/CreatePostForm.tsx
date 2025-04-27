@@ -63,8 +63,9 @@ const CreatePostForm = () => {
         {/* (same as before) */}
 
         <div>
-          <label className={styles.label}>Message</label>
+          <label htmlFor="message" className={styles.label}>Message</label>
           <textarea
+            id="message"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             required
@@ -96,23 +97,27 @@ const CreatePostForm = () => {
         <div>
           <label className={styles.label}>Platforms</label>
           <div className={styles.checkboxGroup}>
-            {availablePlatforms.map((platform) => (
-              <label key={platform} className={styles.checkboxItem}>
-                <input
-                  type="checkbox"
-                  value={platform}
-                  checked={platforms.includes(platform)}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setPlatforms([...platforms, platform]);
-                    } else {
-                      setPlatforms(platforms.filter(p => p !== platform));
-                    }
-                  }}
-                />
-                <span>{platform}</span>
-              </label>
-            ))}
+            {availablePlatforms.map((platform) => {
+              const checkboxId = `platform-${platform}`; // Unique id for each platform
+              return (
+                <label key={platform} className={styles.checkboxItem} htmlFor={checkboxId}>
+                  <input
+                    type="checkbox"
+                    id={checkboxId}  // Unique id
+                    value={platform}
+                    checked={platforms.includes(platform)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setPlatforms([...platforms, platform]);
+                      } else {
+                        setPlatforms(platforms.filter(p => p !== platform));
+                      }
+                    }}
+                  />
+                  <span>{platform}</span>
+                </label>
+            );
+          })}
           </div>
         </div>
 
