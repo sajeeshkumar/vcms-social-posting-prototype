@@ -21,12 +21,13 @@ import java.util.UUID;
 @Slf4j
 public class PostService {
 
-    private final List<String> SUPPORTED_PLATFORMS = Arrays.asList("Twitter", "Instagram", "Bluesky");
+    private final PlatformService platformService;
     private final PostRepository postRepository;
     private final TaskScheduler taskScheduler;
 
     @Autowired
-    public PostService(PostRepository postRepository, TaskScheduler taskScheduler) {
+    public PostService(PlatformService platformService, PostRepository postRepository, TaskScheduler taskScheduler) {
+        this.platformService = platformService;
         this.postRepository = postRepository;
         this.taskScheduler = taskScheduler;
     }
@@ -43,8 +44,10 @@ public class PostService {
             throw new IllegalArgumentException("At least one platform must be specified.");
         }
 
+        List<String> supportedPlatforms = platformService.getSupportedPlatforms();
+
         for (String platform : platforms) {
-            if (!SUPPORTED_PLATFORMS.contains(platform)) {
+            if (!supportedPlatforms.contains(platform)) {
                 log.warn("Platform '{}' is not supported.", platform);
                 // Consider throwing an exception or handling this case appropriately
                 // depending on your application's requirements.  For example:
@@ -119,10 +122,6 @@ public class PostService {
             }
         }, scheduleTime);
         log.info("Post scheduled successfully for {} for id: {}", scheduleTime, post.getId());
-    }
-
-    public List<String> getSupportedPlatforms() {
-        return SUPPORTED_PLATFORMS;
     }
 
     private void postToTwitter(String message, List<String> mediaUrls) {

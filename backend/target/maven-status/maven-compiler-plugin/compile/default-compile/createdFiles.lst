@@ -9,7 +9,9 @@ ca/kodingkrafters/inc/vcms/backend/api/PlatformsApi.class
 ca/kodingkrafters/inc/vcms/backend/VcmsBackendApplication.class
 ca/kodingkrafters/inc/vcms/backend/model/Platform.class
 ca/kodingkrafters/inc/vcms/backend/service/PlatformService.class
+ca/kodingkrafters/inc/vcms/backend/config/WebConfig$1.class
 ca/kodingkrafters/inc/vcms/backend/model/PostRequest.class
 ca/kodingkrafters/inc/vcms/backend/controller/PostController.class
+ca/kodingkrafters/inc/vcms/backend/config/WebConfig.class
 ca/kodingkrafters/inc/vcms/backend/api/ApiUtil.class
 ca/kodingkrafters/inc/vcms/backend/model/Post.class

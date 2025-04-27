@@ -28,6 +28,9 @@ public class PostServiceTest {
     @Mock
     private TaskScheduler taskScheduler;
 
+    @Mock
+    private PlatformService platformService;
+
     @InjectMocks
     private PostService postService;
 
@@ -43,6 +46,8 @@ public class PostServiceTest {
         postRequest.setMessage("Test Message");
         postRequest.setPlatforms(Arrays.asList("Twitter"));
         postRequest.setScheduleTime(null); // Immediate post
+
+        when(platformService.getSupportedPlatforms()).thenReturn(List.of("Twitter"));
 
         // Act
         postService.createPost(postRequest);
@@ -68,6 +73,8 @@ public class PostServiceTest {
         postRequest.setScheduleTime(Date.from(LocalDateTime.now().plusHours(1).atZone(ZoneId.systemDefault()).toInstant())); // Scheduled post
 
         // Act
+        when(platformService.getSupportedPlatforms()).thenReturn(List.of("X"));
+
         postService.createPost(postRequest);
 
         // Assert
@@ -86,20 +93,12 @@ public class PostServiceTest {
         postRequest.setPlatforms(null); // No platforms
 
         // Act & Assert
+        when(platformService.getSupportedPlatforms()).thenReturn(List.of("Twitter"));
+
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             postService.createPost(postRequest);
         });
         assertEquals("At least one platform must be specified.", exception.getMessage());
-    }
-
-    @Test
-    public void testGetSupportedPlatforms_shouldReturnCorrectPlatforms() {
-        // Act
-        List<String> platforms = postService.getSupportedPlatforms();
-
-        // Assert
-        List<String> expectedPlatforms = Arrays.asList("Twitter", "Instagram", "Bluesky");
-        assertEquals(expectedPlatforms, platforms);
     }
 
     @Test
@@ -116,6 +115,8 @@ public class PostServiceTest {
         ArgumentCaptor<Date> scheduledTimeCaptor = ArgumentCaptor.forClass(Date.class);
 
         // Act
+        when(platformService.getSupportedPlatforms()).thenReturn(List.of("Twitter", "Instagram"));
+
         postService.createPost(postRequest); // This calls schedulePost internally
 
         // Assert

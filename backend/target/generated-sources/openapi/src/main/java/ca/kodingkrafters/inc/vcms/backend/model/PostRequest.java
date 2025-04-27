@@ -24,7 +24,7 @@ import jakarta.annotation.Generated;
  * PostRequest
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-04-26T16:42:58.342157-04:00[America/Toronto]", comments = "Generator version: 7.12.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-04-26T22:53:59.029526-04:00[America/Toronto]", comments = "Generator version: 7.12.0")
 public class PostRequest {
 
   private String message;

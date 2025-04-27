@@ -1,0 +1,83 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #f3f4f6; /* Light gray */
+    padding: 1rem;
+  }
+  
+  .card {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 500px;
+  }
+  
+  .title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  
+  .label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #374151; /* Gray-700 */
+  }
+  
+  .input, .textarea, .datetime {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid #d1d5db; /* Gray-300 */
+    border-radius: 0.5rem;
+  }
+  
+  .checkboxGroup {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .checkboxItem {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  
+  .addMediaButton {
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    background: none;
+    border: none;
+    color: #2563eb; /* Blue-600 */
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+  
+  .addMediaButton:hover {
+    text-decoration: underline;
+  }
+  
+  .button {
+    width: 100%;
+    background-color: #2563eb; /* Blue-600 */
+    color: white;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    background-color: #1d4ed8; /* Blue-700 */
+  }
+  

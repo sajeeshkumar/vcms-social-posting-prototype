@@ -1,5 +1,6 @@
 /Users/sajeeshkumar/Documents/workspace/vcms-social-posting-prototype/backend/src/main/java/ca/kodingkrafters/inc/vcms/backend/VcmsBackendApplication.java
 /Users/sajeeshkumar/Documents/workspace/vcms-social-posting-prototype/backend/src/main/java/ca/kodingkrafters/inc/vcms/backend/config/SchedulingConfig.java
+/Users/sajeeshkumar/Documents/workspace/vcms-social-posting-prototype/backend/src/main/java/ca/kodingkrafters/inc/vcms/backend/config/WebConfig.java
 /Users/sajeeshkumar/Documents/workspace/vcms-social-posting-prototype/backend/src/main/java/ca/kodingkrafters/inc/vcms/backend/controller/PlatformController.java
 /Users/sajeeshkumar/Documents/workspace/vcms-social-posting-prototype/backend/src/main/java/ca/kodingkrafters/inc/vcms/backend/controller/PostController.java
 /Users/sajeeshkumar/Documents/workspace/vcms-social-posting-prototype/backend/src/main/java/ca/kodingkrafters/inc/vcms/backend/model/Platform.java
