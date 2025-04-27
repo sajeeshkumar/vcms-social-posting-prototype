@@ -2,13 +2,11 @@ package ca.kodingkrafters.inc.vcms.backend.controller;
 
 import ca.kodingkrafters.inc.vcms.backend.api.PostsApi;
 import ca.kodingkrafters.inc.vcms.backend.model.PostRequest;
-import ca.kodingkrafters.inc.vcms.backend.service.PostService;
+import ca.kodingkrafters.inc.vcms.backend.service.posts.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.net.URI;
 
 @RestController
 public class PostController implements PostsApi {

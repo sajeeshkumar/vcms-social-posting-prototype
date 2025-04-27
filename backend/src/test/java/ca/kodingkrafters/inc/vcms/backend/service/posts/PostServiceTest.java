@@ -1,21 +1,20 @@
-package ca.kodingkrafters.inc.vcms.backend.service;
+package ca.kodingkrafters.inc.vcms.backend.service.posts;
 
 import ca.kodingkrafters.inc.vcms.backend.model.Post;
 import ca.kodingkrafters.inc.vcms.backend.model.PostRequest;
 import ca.kodingkrafters.inc.vcms.backend.repository.PostRepository;
+import ca.kodingkrafters.inc.vcms.backend.service.platforms.PlatformPoster;
+import ca.kodingkrafters.inc.vcms.backend.service.platforms.PlatformService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.scheduling.TaskScheduler;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -31,12 +30,29 @@ public class PostServiceTest {
     @Mock
     private PlatformService platformService;
 
-    @InjectMocks
+    @Mock
+    private PlatformPoster twitterPoster;
+
+    @Mock
+    private PlatformPoster instagramPoster;
+
+    @Mock
+    private PlatformPoster blueskyPoster;
+
     private PostService postService;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+
+        List<PlatformPoster> posters = Arrays.asList(twitterPoster, instagramPoster, blueskyPoster);
+
+// Mock getPlatformName() for each poster
+        when(twitterPoster.getPlatformName()).thenReturn("Twitter");
+        when(instagramPoster.getPlatformName()).thenReturn("Instagram");
+        when(blueskyPoster.getPlatformName()).thenReturn("Bluesky");
+
+        postService = new PostService(platformService, postRepository, taskScheduler, posters);
     }
 
     @Test
@@ -46,6 +62,7 @@ public class PostServiceTest {
         postRequest.setMessage("Test Message");
         postRequest.setPlatforms(Arrays.asList("Twitter"));
         postRequest.setScheduleTime(null); // Immediate post
+        postRequest.setMediaUrls(Arrays.asList("url1", "url2"));
 
         when(platformService.getSupportedPlatforms()).thenReturn(List.of("Twitter"));
 
@@ -53,13 +70,7 @@ public class PostServiceTest {
         postService.createPost(postRequest);
 
         // Assert
-        // Verify that postImmediately is called.  Since postImmediately is a private method,
-        // we can't directly verify its invocation.  Instead, we verify that the methods
-        // it calls (which are also private, but called within the same class) are called.
-        // In this case, postImmediately calls postToTwitter, so we verify that.
-        // We do NOT want to verify interactions with the repository or scheduler here,
-        // as those are related to scheduled posts, not immediate ones.
-        // We'll use a lenient stub for the repository and scheduler to avoid unnecessary verifications.
+        verify(twitterPoster, times(1)).post("Test Message", Arrays.asList("url1", "url2"));
         verify(postRepository, never()).save(any(Post.class));
         verify(taskScheduler, never()).schedule(any(Runnable.class), any(Date.class));
     }
@@ -69,18 +80,16 @@ public class PostServiceTest {
         // Arrange
         PostRequest postRequest = new PostRequest();
         postRequest.setMessage("Test Message");
-        postRequest.setPlatforms(Arrays.asList("X"));
-        postRequest.setScheduleTime(Date.from(LocalDateTime.now().plusHours(1).atZone(ZoneId.systemDefault()).toInstant())); // Scheduled post
+        postRequest.setPlatforms(Arrays.asList("Twitter"));
+        postRequest.setScheduleTime(Date.from(LocalDateTime.now().plusHours(1).atZone(ZoneId.systemDefault()).toInstant()));
+        postRequest.setMediaUrls(Arrays.asList("url1", "url2"));
+
+        when(platformService.getSupportedPlatforms()).thenReturn(List.of("Twitter"));
 
         // Act
-        when(platformService.getSupportedPlatforms()).thenReturn(List.of("X"));
-
         postService.createPost(postRequest);
 
         // Assert
-        // Verify that schedulePost is called.  Like with postImmediately, we verify the
-        // behavior of methods called *by* schedulePost.  In this case, schedulePost
-        // saves to the repository and schedules a task.
         verify(postRepository, times(1)).save(any(Post.class));
         verify(taskScheduler, times(1)).schedule(any(Runnable.class), any(Date.class));
     }
@@ -92,9 +101,9 @@ public class PostServiceTest {
         postRequest.setMessage("Test Message");
         postRequest.setPlatforms(null); // No platforms
 
-        // Act & Assert
         when(platformService.getSupportedPlatforms()).thenReturn(List.of("Twitter"));
 
+        // Act & Assert
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             postService.createPost(postRequest);
         });
@@ -114,31 +123,31 @@ public class PostServiceTest {
         ArgumentCaptor<Runnable> runnableCaptor = ArgumentCaptor.forClass(Runnable.class);
         ArgumentCaptor<Date> scheduledTimeCaptor = ArgumentCaptor.forClass(Date.class);
 
-        // Act
         when(platformService.getSupportedPlatforms()).thenReturn(List.of("Twitter", "Instagram"));
 
-        postService.createPost(postRequest); // This calls schedulePost internally
+        // Act
+        postService.createPost(postRequest);
 
         // Assert
-        // Verify that the post is saved with the correct data
         verify(postRepository).save(postCaptor.capture());
         Post savedPost = postCaptor.getValue();
         assertEquals(postRequest.getMessage(), savedPost.getMessage());
         assertEquals(postRequest.getPlatforms(), savedPost.getPlatforms());
         assertEquals(postRequest.getMediaUrls(), savedPost.getMediaUrls());
-        assertFalse(savedPost.isPosted()); // Initially not posted
+        assertFalse(savedPost.isPosted());
 
-        // Verify that the task is scheduled with the correct time
         verify(taskScheduler).schedule(runnableCaptor.capture(), scheduledTimeCaptor.capture());
         assertEquals(postRequest.getScheduleTime(), scheduledTimeCaptor.getValue());
 
-        // Execute the scheduled task and verify that it updates the post and calls the posting methods
+        // Execute scheduled task manually
         Runnable scheduledTask = runnableCaptor.getValue();
         scheduledTask.run();
 
-        verify(postRepository, times(2)).save(postCaptor.capture()); // Save is called again in the task
-        Post updatedPost = postCaptor.getValue();  // Get the post after the task executes.
-        assertTrue(updatedPost.isPosted()); // Should be posted after task execution
+        verify(postRepository, times(2)).save(postCaptor.capture()); // Saved again after posting
+        Post updatedPost = postCaptor.getValue();
+        assertTrue(updatedPost.isPosted());
 
+        verify(twitterPoster, times(1)).post("Test Message", Arrays.asList("url1", "url2"));
+        verify(instagramPoster, times(1)).post("Test Message", Arrays.asList("url1", "url2"));
     }
 }

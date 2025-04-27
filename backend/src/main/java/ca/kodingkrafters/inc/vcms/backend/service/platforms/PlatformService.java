@@ -1,4 +1,4 @@
-package ca.kodingkrafters.inc.vcms.backend.service;
+package ca.kodingkrafters.inc.vcms.backend.service.platforms;
 
 import ca.kodingkrafters.inc.vcms.backend.model.Platform;
 import ca.kodingkrafters.inc.vcms.backend.repository.PlatformRepository;
